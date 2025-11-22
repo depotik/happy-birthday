@@ -2,16 +2,17 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>С Днем Рождения!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>С Днём Рождения!</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+
         :root {
-            --bg-color: #f0f4f8;
             --box-color: #ff6b6b;
             --ribbon-color: #ffd93d;
-            --cake-color: #f8a5c2;
-            --icing-color: #ffeaa7;
-            --text-color: #4a4e69;
+            --cake-base: #fd79a8;     /* Розовый бисквит */
+            --cake-icing: #ffeaa7;    /* Кремовая глазурь */
+            --text-color: #6c5ce7;    /* Фиолетовый текст */
         }
 
         body {
@@ -21,452 +22,561 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: radial-gradient(circle, #ffffff 0%, #dde1e7 100%);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #a18cd1, #fbc2eb);
+            background-size: 400% 400%;
+            animation: gradientBG 10s ease infinite;
+            font-family: 'Fredoka One', cursive;
             overflow: hidden;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        #scene {
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        #stage {
             position: relative;
             width: 100vmin;
             height: 100vmin;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
+            perspective: 1000px;
         }
 
-        /* --- ЭТАП 1: КОРОБКА --- */
-        .gift-container {
-            position: absolute;
-            width: 150px;
-            height: 150px;
+        /* --- КОРОБКА --- */
+        .gift-box {
+            position: relative;
+            width: 22vmin;
+            height: 22vmin;
             cursor: pointer;
-            transition: transform 0.3s;
-            z-index: 10;
+            z-index: 50;
+            transition: transform 0.2s;
         }
 
-        .gift-container:hover {
-            animation: shake 0.5s infinite;
+        .gift-box:hover {
+            transform: scale(1.05) rotate(2deg);
         }
 
-        @keyframes shake {
-            0% { transform: rotate(0deg); }
-            25% { transform: rotate(5deg); }
-            50% { transform: rotate(0deg); }
-            75% { transform: rotate(-5deg); }
-            100% { transform: rotate(0deg); }
+        .gift-box::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 120%;
+            height: 120%;
+            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            animation: pulseGlow 2s infinite;
+        }
+
+        @keyframes pulseGlow {
+            0% { opacity: 0.5; transform: translate(-50%, -50%) scale(0.9); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+            100% { opacity: 0.5; transform: translate(-50%, -50%) scale(0.9); }
         }
 
         .box-body {
             position: absolute;
             bottom: 0;
-            width: 150px;
-            height: 120px;
-            background-color: var(--box-color);
-            border-radius: 0 0 10px 10px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-
-        .box-body::before { /* Лента вертикальная */
-            content: '';
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 30px;
-            height: 100%;
-            background-color: var(--ribbon-color);
+            width: 100%;
+            height: 85%;
+            background: linear-gradient(135deg, #ff6b6b, #ee5253);
+            border-radius: 2vmin;
+            box-shadow: 0 2vmin 4vmin rgba(0,0,0,0.2);
         }
 
         .box-lid {
             position: absolute;
-            top: 0;
-            left: -10px;
-            width: 170px;
-            height: 40px;
-            background-color: #ff5252;
-            border-radius: 5px;
+            top: -5%;
+            left: -5%;
+            width: 110%;
+            height: 25%;
+            background: linear-gradient(135deg, #ff4757, #ff6b6b);
+            border-radius: 1.5vmin;
+            box-shadow: 0 1vmin 2vmin rgba(0,0,0,0.15);
             z-index: 2;
-            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-            transition: transform 0.5s ease-out;
+            transform-origin: center;
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .box-lid::before { /* Лента на крышке */
-            content: '';
+        .ribbon-v {
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
-            width: 30px;
+            width: 20%;
             height: 100%;
-            background-color: var(--ribbon-color);
+            background: linear-gradient(to right, #ffd93d, #ffeb3b);
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
-        .click-hint {
+        .click-msg {
             position: absolute;
-            bottom: -40px;
-            width: 100%;
+            bottom: -10vmin;
+            width: 300%;
+            left: -100%;
             text-align: center;
-            color: #888;
-            font-weight: bold;
-            animation: pulse 1s infinite alternate;
+            color: #fff;
+            font-size: 3.5vmin;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            animation: bounceText 1.5s infinite;
+            pointer-events: none;
         }
 
-        @keyframes pulse {
-            from { opacity: 0.6; transform: scale(1); }
-            to { opacity: 1; transform: scale(1.1); }
+        @keyframes bounceText {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-1vmin); }
         }
 
-        /* Анимации открытия коробки */
-        .gift-container.open .box-lid {
-            transform: translateY(-100px) rotate(-20deg);
+        /* Анимация открытия */
+        .gift-box.open .box-lid {
+            transform: translateY(-25vmin) rotate(-15deg) scale(1.1);
             opacity: 0;
         }
-
-        .gift-container.open .box-body {
-            animation: fadeOutBox 0.5s forwards 0.3s;
+        .gift-box.open .box-body {
+            animation: zoomOutBox 0.5s forwards 0.3s;
         }
+        .gift-box.open .click-msg { opacity: 0; transition: opacity 0.2s; }
 
-        .gift-container.open .click-hint {
-            display: none;
-        }
+        @keyframes zoomOutBox { to { transform: scale(0) rotate(10deg); opacity: 0; } }
 
-        @keyframes fadeOutBox {
-            to { transform: scale(0); opacity: 0; }
-        }
-
-        /* --- КОНФЕТТИ --- */
-        .confetti {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background-color: #f00;
-            opacity: 0;
-        }
-
-        /* --- ЭТАП 2: ТОРТ --- */
+        /* --- ТОРТ --- */
         .cake-container {
             position: absolute;
-            width: 200px;
-            height: 200px;
-            display: none; /* Скрыт по умолчанию */
+            bottom: 10vmin; /* Позиция торта */
+            width: 45vmin; 
+            height: 30vmin;
+            display: none;
             flex-direction: column;
             align-items: center;
             justify-content: flex-end;
-            z-index: 5;
+            z-index: 10;
         }
 
         .cake-base {
-            width: 180px;
-            height: 100px;
-            background-color: var(--cake-color);
-            border-radius: 10px;
+            width: 90%;
+            height: 18vmin; 
+            background: var(--cake-base);
+            border-radius: 2vmin;
             position: relative;
-            box-shadow: inset -10px 0 rgba(0,0,0,0.05);
+            box-shadow: inset -1vmin -1vmin rgba(0,0,0,0.1), 0 1vmin 3vmin rgba(0,0,0,0.15);
         }
 
-        .cake-icing {
+        /* Глазурь - уменьшена по ширине */
+        .icing {
             position: absolute;
-            top: 0;
-            left: -5px;
-            width: 190px;
-            height: 40px;
-            background-color: var(--icing-color);
-            border-radius: 20px;
+            top: 10vmin; 
+            left: 5%; 
+            width: 90%; 
+            height: 8vmin;
+            background: var(--cake-icing);
+            border-radius: 3vmin 3vmin 4vmin 4vmin;
             z-index: 2;
         }
 
-        .cake-icing::after {
-            content: '';
+        .drip {
             position: absolute;
-            bottom: -10px;
-            left: 10px;
-            width: 20px;
-            height: 20px;
-            background-color: var(--icing-color);
-            border-radius: 50%;
-            box-shadow: 30px 0 var(--icing-color), 60px 0 var(--icing-color), 90px 0 var(--icing-color), 120px 0 var(--icing-color), 150px 0 var(--icing-color);
+            background: var(--cake-icing);
+            border-radius: 0 0 50% 50%;
+            width: 4vmin;
+            top: 6vmin; /* Свисает с глазури */
         }
+        .drip:nth-child(1) { height: 5vmin; left: 10%; }
+        .drip:nth-child(2) { height: 3vmin; left: 30%; }
+        .drip:nth-child(3) { height: 6vmin; left: 55%; }
+        .drip:nth-child(4) { height: 4vmin; left: 80%; }
 
-        /* Анимация падения и переворота торта */
-        .cake-animate-enter {
-            display: flex;
-            animation: dropAndFlip 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-
-        @keyframes dropAndFlip {
-            0% {
-                transform: translateY(-500px) rotate(180deg);
-                opacity: 0;
-            }
-            60% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 1;
-            }
-            80% {
-                transform: translateY(-20px) rotate(-5deg);
-            }
-            100% {
-                transform: translateY(0) rotate(0deg);
-            }
-        }
-
-        /* --- СВЕЧИ --- */
-        .candles-wrapper {
+        /* Свечи */
+        .candles {
             position: absolute;
-            top: -40px; /* Позиция над тортом */
+            top: -2vmin; 
             width: 100%;
-            height: 50px;
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 4vmin;
+            z-index: 1;
         }
 
         .candle {
-            width: 12px;
-            height: 40px;
-            background: repeating-linear-gradient(45deg, #6c5ce7, #6c5ce7 5px, #fff 5px, #fff 10px);
+            width: 2.5vmin;
+            height: 12vmin; 
+            background: repeating-linear-gradient(45deg, #74b9ff, #74b9ff 1vmin, #fff 1vmin, #fff 2vmin);
+            border-radius: 0.5vmin;
             position: relative;
-            opacity: 0; /* Скрыты */
-            transform: translateY(-200px);
+            transform: translateY(-100vh); /* Падают сверху */
         }
 
         .flame {
             position: absolute;
-            top: -15px;
+            top: -3vmin;
             left: 50%;
-            transform: translateX(-50%);
-            width: 10px;
-            height: 15px;
-            background-color: #fdcb6e;
+            transform: translateX(-50%) scale(0);
+            width: 2.5vmin;
+            height: 3.5vmin;
+            background: radial-gradient(ellipse at bottom, #f1c40f 0%, #e67e22 100%);
             border-radius: 50% 50% 20% 20%;
-            animation: flicker 0.5s infinite alternate;
-            opacity: 0;
+            box-shadow: 0 0 3vmin #f1c40f;
+            animation: flameFlicker 0.4s infinite alternate;
+            transform-origin: center bottom;
         }
 
-        @keyframes flicker {
-            from { transform: translateX(-50%) scale(1); }
-            to { transform: translateX(-50%) scale(1.1); opacity: 0.8; }
+        @keyframes flameFlicker {
+            from { transform: translateX(-50%) scale(1) skewX(-2deg); opacity: 0.9; }
+            to { transform: translateX(-50%) scale(1.1) skewX(2deg); opacity: 1; }
         }
 
-        .candle-fall {
+        /* Анимация торта (выпрыгивает снизу) */
+        .cake-appear {
+            animation: elasticUp 1.2s cubic-bezier(0.280, 0.840, 0.420, 1) forwards;
+        }
+
+        @keyframes elasticUp {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+            60% { transform: translateY(-5vmin) scale(1.05); opacity: 1; }
+            80% { transform: translateY(2vmin) scale(0.95); }
+            100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        .candle-drop {
             animation: dropCandle 0.6s ease-out forwards;
         }
 
         @keyframes dropCandle {
-            0% { transform: translateY(-200px); opacity: 0; }
-            100% { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(0); }
         }
 
-        /* --- ЭТАП 3: ТЕКСТ И КОЛПАК --- */
-        .final-message {
+        /* --- ТЕКСТ --- */
+        .text-wrapper {
             position: absolute;
-            top: 15%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            opacity: 0;
-            transform: scale(0.5);
+            top: 12vmin;
+            width: 100%;
+            text-align: center;
             z-index: 20;
         }
 
-        .final-message h1 {
-            font-size: 4rem;
+        .letter {
+            display: inline-block;
+            font-size: 11vmin;
             color: var(--text-color);
-            text-transform: uppercase;
-            text-shadow: 2px 2px 0px #fff;
-            margin: 0;
-            text-align: center;
-            line-height: 1.1;
+            text-shadow: 0.5vmin 0.5vmin 0 #fff;
+            opacity: 0;
+            transform: scale(0);
+            margin: 0 0.2vmin;
         }
 
-        .final-message.show {
-            animation: popText 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        .letter.pop {
+            animation: popLetter 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
-        @keyframes popText {
+        @keyframes popLetter {
             to { opacity: 1; transform: scale(1); }
         }
 
-        /* Колпак */
+        /* Пробел между словами */
+        .word-spacer {
+            width: 2vmin; 
+            display: inline-block;
+        }
+
+        /* --- КОЛПАК НА БУКВЕ --- */
         .party-hat {
             position: absolute;
-            top: -100px; /* Начало выше экрана */
+            top: -200px; /* Начало падения */
+            right: -1vmin; /* Смещение относительно буквы */
             width: 0;
             height: 0;
-            border-left: 30px solid transparent;
-            border-right: 30px solid transparent;
-            border-bottom: 70px solid #00cec9;
+            border-left: 3vmin solid transparent;
+            border-right: 3vmin solid transparent;
+            border-bottom: 8vmin solid #00b894; /* Зеленый конус */
+            transform: rotate(20deg);
             opacity: 0;
-            transform: rotate(15deg);
             z-index: 25;
         }
 
-        .party-hat::after {
+        .party-hat::after { /* Помпон (овал) */
             content: '';
             position: absolute;
-            bottom: -75px;
-            left: -32px;
-            width: 64px;
-            height: 10px;
-            background: #fdcb6e;
+            top: 7.5vmin; 
+            left: -3vmin; 
+            width: 6vmin; 
+            height: 1.5vmin; 
+            background: #fab1a0;
             border-radius: 50%;
         }
 
-        .party-hat.drop {
-            animation: dropHat 0.8s ease-out forwards;
+        .hat-fall {
+            animation: hatLand 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
-        @keyframes dropHat {
-            0% { top: -200px; opacity: 0; transform: rotate(0deg); }
-            60% { top: 50px; opacity: 1; transform: rotate(360deg); }
-            100% { top: 100px; opacity: 1; transform: rotate(380deg); }
+        @keyframes hatLand {
+            0% { top: -50vh; opacity: 0; }
+            100% { top: -5vmin; opacity: 1; }
+        }
+
+        /* --- КОНФЕТТИ И ШАРЫ --- */
+        .confetti {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 1.2vmin;
+            height: 1.2vmin;
+            z-index: 40;
+        }
+
+        .balloon {
+            position: absolute;
+            bottom: -20vh;
+            width: 12vmin;
+            height: 15vmin;
+            background: red;
+            border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+            opacity: 0.9;
+            box-shadow: inset -1vmin -1vmin rgba(0,0,0,0.1);
+            z-index: 5;
+            animation: floatUp 8s linear forwards;
+        }
+        .balloon::after { /* Нитка */
+            content: '';
+            position: absolute;
+            bottom: -4vmin;
+            left: 50%;
+            width: 0.2vmin;
+            height: 4vmin;
+            background: rgba(0,0,0,0.3);
+        }
+        
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-30vh) rotate(5deg); }
+            50% { transform: translateY(-60vh) rotate(-5deg); }
+            75% { transform: translateY(-90vh) rotate(2deg); }
+            100% { transform: translateY(-120vh) rotate(0deg); }
         }
 
     </style>
 </head>
 <body>
 
-    <div id="scene">
-        <!-- ЭТАП 1: Коробка -->
-        <div class="gift-container" id="giftBox" onclick="startSurprise()">
-            <div class="box-lid"></div>
-            <div class="box-body"></div>
-            <div class="click-hint">Нажми меня!</div>
+    <div id="stage">
+        
+
+<div class="text-wrapper">
+            <div id="line1">
+                <span class="letter">С</span>
+                <!-- Пробел между словами "С" и "ДНЕМ" -->
+                <span class="word-spacer"></span> 
+                <span class="letter">Д</span>
+                <span class="letter">Н</span>
+                <span class="letter">Е</span>
+                <span class="letter" style="position: relative;">
+                    М
+                    <div class="party-hat" id="hat"></div>
+                </span>
+            </div>
+            <div id="line2" style="margin-top: 1vmin;">
+                <span class="letter">Р</span>
+                <span class="letter">О</span>
+                <span class="letter">Ж</span>
+                <span class="letter">Д</span>
+                <span class="letter">Е</span>
+                <span class="letter">Н</span>
+                <span class="letter">И</span>
+                <span class="letter">Я</span>
+            </div>
         </div>
 
-        <!-- ЭТАП 2: Торт -->
-        <div class="cake-container" id="cake">
-            <div class="candles-wrapper">
+        
+
+<div class="gift-box" id="giftBox" onclick="startParty()">
+            <div class="box-lid">
+                <div class="ribbon-v"></div>
+            </div>
+            <div class="box-body">
+                <div class="ribbon-v"></div>
+            </div>
+            <div class="click-msg">Нажми чтобы открыть!</div>
+        </div>
+
+        
+
+<div class="cake-container" id="cake">
+            <div class="candles">
                 <div class="candle" id="c1"><div class="flame"></div></div>
                 <div class="candle" id="c2"><div class="flame"></div></div>
                 <div class="candle" id="c3"><div class="flame"></div></div>
             </div>
-            <div class="cake-icing"></div>
+            <div class="icing">
+                <div class="drip"></div>
+                <div class="drip"></div>
+                <div class="drip"></div>
+                <div class="drip"></div>
+            </div>
             <div class="cake-base"></div>
         </div>
-
-        <!-- ЭТАП 3: Текст -->
-        <div class="final-message" id="message">
-            <h1>Happy<br>Birthday</h1>
-        </div>
-        
-        <!-- Колпак (отдельно от текста) -->
-        <div class="party-hat" id="hat"></div>
     </div>
 
     <script>
-        function startSurprise() {
+        // --- АУДИО ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        // Простая мелодия Happy Birthday
+        const tune = [
+            {n:'G4', d:0.3}, {n:'G4', d:0.1}, {n:'A4', d:0.4}, {n:'G4', d:0.4}, {n:'C5', d:0.4}, {n:'B4', d:0.8},
+            {n:'G4', d:0.3}, {n:'G4', d:0.1}, {n:'A4', d:0.4}, {n:'G4', d:0.4}, {n:'D5', d:0.4}, {n:'C5', d:0.8}
+        ];
+        
+        const freqs = { 'G4': 392.00, 'A4': 440.00, 'B4': 493.88, 'C5': 523.25, 'D5': 587.33 };
+
+        function playNote(freq, dur, time) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.value = freq;
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(time);
+            gain.gain.setValueAtTime(0.1, time);
+            gain.gain.exponentialRampToValueAtTime(0.001, time + dur);
+            osc.stop(time + dur);
+        }
+
+        function playSong() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            let now = audioCtx.currentTime;
+            tune.forEach(t => {
+                playNote(freqs[t.n], t.d, now);
+                now += t.d + 0.05;
+            });
+        }
+
+        // --- ЛОГИКА ---
+        function startParty() {
             const box = document.getElementById('giftBox');
-            
-            // 1. Убираем клик, чтобы не нажать дважды
-            box.onclick = null;
+            box.onclick = null; // Блокируем повторный клик
             box.style.cursor = 'default';
 
-            // 2. Анимация открытия коробки
+            // 1. Музыка
+            playSong();
+
+            // 2. Открытие коробки
             box.classList.add('open');
 
-            // 3. Запуск конфетти (сразу при открытии)
-            fireConfetti();
+            // 3. Конфетти (взрыв)
+            spawnConfetti(30);
 
-            // 4. Удаляем коробку и запускаем торт
+            // 4. Смена сцены
             setTimeout(() => {
                 box.style.display = 'none';
-                showCake();
-            }, 800); // Ждем пока коробка исчезнет
+                revealCake();
+            }, 800);
         }
 
-        function createConfettiParticle() {
-            const colors = ['#eb4d4b', '#f0932b', '#f6e58d', '#6ab04c', '#4834d4', '#be2edd'];
-            const confetti = document.createElement('div');
-            confetti.classList.add('confetti');
+        function revealCake() {
+            const cake = document.getElementById('cake');
+            cake.style.display = 'flex';
+            cake.classList.add('cake-appear');
+
+            // Падение свечей
+            setTimeout(() => {
+                dropCandles(0);
+            }, 1000);
+        }
+
+        function dropCandles(idx) {
+            const ids = ['c1', 'c2', 'c3'];
+            if (idx >= ids.length) {
+                setTimeout(lightUp, 500);
+                return;
+            }
+            document.getElementById(ids[idx]).classList.add('candle-drop');
+            // Небольшой "стук" при падении свечи
+            playNote(100 + (idx*20), 0.1, audioCtx.currentTime); 
+            setTimeout(() => dropCandles(idx + 1), 200);
+        }
+
+        function lightUp() {
+            // Зажигаем огонь (CSS scale)
+            document.querySelectorAll('.flame').forEach(f => {
+                f.style.transform = 'translateX(-50%) scale(1)';
+            });
             
-            // Случайный цвет
-            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-            
-            // Позиция в центре
-            confetti.style.left = '50%';
-            confetti.style.top = '50%';
-            
-            // Случайное направление вылета
-            const angle = Math.random() * Math.PI * 2;
-            const velocity = 100 + Math.random() * 200; // Расстояние полета
-            const tx = Math.cos(angle) * velocity;
-            const ty = Math.sin(angle) * velocity;
-            
-            // Анимация через Web Animation API для динамических значений
-            confetti.animate([
-                { transform: 'translate(-50%, -50%) scale(0)', opacity: 1 },
-                { transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(1) rotate(${Math.random()*360}deg)`, opacity: 0 }
-            ], {
-                duration: 1000 + Math.random() * 500,
-                easing: 'cubic-bezier(0.25, 1, 0.5, 1)',
-                fill: 'forwards'
+            // Показываем текст
+            showText();
+        }
+
+        function showText() {
+            const letters = document.querySelectorAll('.letter');
+            letters.forEach((l, i) => {
+                setTimeout(() => {
+                    l.classList.add('pop');
+                    // Если это буква "М" со шляпой, роняем шляпу
+                    if (l.querySelector('#hat')) {
+                        setTimeout(() => document.getElementById('hat').classList.add('hat-fall'), 300);
+                    }
+                }, i * 100);
             });
 
-            document.getElementById('scene').appendChild(confetti);
-
-            // Удаляем элемент после анимации
-            setTimeout(() => confetti.remove(), 1500);
+            // Финальный штрих: шарики
+            setTimeout(releaseBalloons, 1000);
         }
 
-        function fireConfetti() {
-            // Создаем 60 частиц
-            for(let i=0; i<60; i++) {
-                setTimeout(createConfettiParticle, i * 10);
+        // --- ЭФФЕКТЫ ---
+        function spawnConfetti(amount) {
+            const colors = ['#fd79a8', '#ffeaa7', '#00b894', '#0984e3', '#6c5ce7'];
+            for (let i = 0; i < amount; i++) {
+                const c = document.createElement('div');
+                c.classList.add('confetti');
+                c.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+                
+                // Случайная позиция вылета из центра
+                const angle = Math.random() * Math.PI * 2;
+                const dist = 20 + Math.random() * 40; // vmin
+                const x = Math.cos(angle) * dist;
+                const y = Math.sin(angle) * dist;
+
+                c.animate([
+                    { transform: 'translate(0,0) scale(0)', opacity: 1 },
+                    { transform: `translate(${x}vmin, ${y}vmin) scale(1) rotate(720deg)`, opacity: 0 }
+                ], {
+                    duration: 1000 + Math.random()*1000,
+                    easing: 'cubic-bezier(0.25, 1, 0.5, 1)',
+                    fill: 'forwards'
+                });
+
+                document.getElementById('stage').appendChild(c);
+                setTimeout(() => c.remove(), 2000);
             }
         }
 
-        function showCake() {
-            const cake = document.getElementById('cake');
-            // Показываем контейнер и добавляем класс анимации (падение и переворот)
-            cake.style.display = 'flex';
-            cake.classList.add('cake-animate-enter');
-
-            // После того как торт упал, запускаем свечи
-            setTimeout(() => {
-                dropCandles();
-            }, 1200); // 1.2s длится анимация торта
-        }
-
-        function dropCandles() {
-            const c1 = document.getElementById('c1');
-            const c2 = document.getElementById('c2');
-            const c3 = document.getElementById('c3');
-
-            // Падают по очереди
-            c1.classList.add('candle-fall');
+        function releaseBalloons() {
+            const colors = ['rgba(255,107,107,0.8)', 'rgba(255,234,167,0.8)', 'rgba(85,239,196,0.8)', 'rgba(116,185,255,0.8)'];
+            const stage = document.getElementById('stage');
             
-            setTimeout(() => {
-                c2.classList.add('candle-fall');
-            }, 300);
-
-            setTimeout(() => {
-                c3.classList.add('candle-fall');
-            }, 600);
-
-            // Зажигаем огонь после падения последней
-            setTimeout(() => {
-                document.querySelectorAll('.flame').forEach(f => f.style.opacity = 1);
-                showFinalText();
-            }, 1200);
+            // Создаем 15 шариков
+            for(let i=0; i<15; i++) {
+                setTimeout(() => {
+                    const b = document.createElement('div');
+                    b.classList.add('balloon');
+                    b.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    b.style.left = (Math.random() * 90) + '%';
+                    
+                    // Разный размер
+                    const scale = 0.8 + Math.random() * 0.5;
+                    b.style.transform = `scale(${scale})`;
+                    
+                    stage.appendChild(b);
+                    
+                    // Удаляем, когда улетят
+                    setTimeout(() => b.remove(), 8000);
+                }, i * 300);
+            }
         }
-
-        function showFinalText() {
-            const msg = document.getElementById('message');
-            const hat = document.getElementById('hat');
-
-            // Показываем текст
-            msg.classList.add('show');
-
-            // Колпак падает прямо на надпись
-            setTimeout(() => {
-                hat.classList.add('drop');
-                // Позиционируем колпак по центру надписи
-                const msgRect = msg.getBoundingClientRect();
-                const sceneRect = document.getElementById('scene').getBoundingClientRect();
-                hat.style.left = (msgRect.left + msgRect.width/2 - sceneRect.left - 30) + 'px';
-            }, 500);
-        }
-
     </script>
 </body>
 </html>
+
